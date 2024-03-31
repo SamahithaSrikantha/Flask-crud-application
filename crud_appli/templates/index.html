@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %} Crud Appli {% endblock %}
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col md-12">
+            <div class="jumbotron p-3">
+                <h2>Manage <b>Employees </b> <button type="button" class="btn btn-success float-right"
+data-toggle="modal" data-target="#mymodal">Add New Employees</button> </h2>
+
+                {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      {% for message in messages %}
+        {{ message }}
+      {% endfor %}
+  {% endif %}
+{% endwith %}
+
+                <table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for row in employes %}
+    <tr>
+      <th scope="row">{{row.id}}</th>
+      <td>{{row.name}}</td>
+      <td>{{row.email}}</td>
+      <td>{{row.phone}}</td>
+        <td>
+            <a href=" /update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Edit</a>
+<a href="/delete/{{row.id}} " class="btn btn-danger btn-xs" onclick="return confirm('Are You Sure To Delete ?')">Delete</a>
+        </td>
+    </tr>
+
+  </tbody>
+                    {% endfor %}
+</table>
+            </div>
+
+
+           <!-- Modal Add Employee -->
+<div id="mymodal" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Employee</h4>
+            </div>
+            <div class="modal-body">
+                <form action={{url_for('insert')}} method="POST">
+                    <div class="form-group">
+                        <label for="n">Name</label>
+                        <input type="text" class="form-control" id="n" name="name" placeholder="Samahitha">
+                    </div>
+                    <div class="form-group">
+                        <label for="em">Email</label>
+                        <input type="text" class="form-control" id="em" name="mail" placeholder="sam..@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="ph">Phone number</label>
+                        <input type="text" class="form-control" id="ph" name="phn" placeholder="1234567895">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+            <!--edit entry-->
+{% for row in employes %}
+<div id="modaledit{{row.id}}" class="modal fade" role="dialog" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Employee</h4>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('update') }}" method="POST">
+    <div class="form-group">
+        <label for="na">Name</label>
+        <input type="text" class="form-control" id="na" name="name" value="{{ row.name }}">
+    </div>
+    <div class="form-group">
+        <label for="em">Email</label>
+        <input type="text" class="form-control" id="ema" name="email" value="{{ row.email }}">
+    </div>
+    <div class="form-group">
+        <label for="pho">Phone number</label>
+        <input type="text" class="form-control" id="pho" name="phone" value="{{ row.phone }}">
+    </div>
+    <input type="hidden" name="id" value="{{ row.id }}">
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+    </div>
+    </div>
+</div>
+{% endblock %}
